@@ -1,0 +1,23 @@
+<%- include('../../shared/includes/head', { pageTitle: 'Login' } ) %>
+<link rel="stylesheet" href="/styles/forms.css">
+<link rel="stylesheet" href="/styles/auth.css">
+</head>
+<body>
+    <%- include('../../shared/includes/header') %>
+    <main>
+        <h1>Login</h1>
+        <form action="/login" method="post">
+            <input type="hidden" name="_csrf" value="<%= locals.csrfToken %>">  <!-- csrf-token.js에서 생성하였음. -->
+            <p>    
+                <label for="email">E-Mail</label>   <!-- for='email' 과 input id='email'의 연결 -->
+                <input type="email" id="email" name="email" required> <!-- required = 공백불가능 -->
+            </p>
+            <p>    
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" minlength="6" required>
+            </p>
+            <button class="btn">Login</button>
+            <p id="switch-form"><a href="/login">Create new user</a></p>
+        </form>
+    </main>
+<%- include('../../shared/includes/footer') %>

@@ -1,0 +1,81 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: "Montserrat", "sans-serif";
+
+  /* 사용자정의 css코드 */
+  --color-gray-50: rgb(243, 236, 230);
+  --color-gray-100: rgb(207, 201, 195);
+  --color-gray-300: rgb(99, 92, 86);
+  --color-gray-400: rgb(70, 65, 60);
+  --color-gray-500: rgb(37, 34, 31);
+  --color-gray-600: rgb(32, 29, 26);
+  --color-gray-700: rgb(31, 26, 22);
+
+  --color-primary-50: rgb(253, 224, 200);
+  --color-primary-100: rgb(253, 214, 183);
+  --color-primary-200: rgb(250, 191, 143);
+  --color-primary-400: rgb(223, 159, 41);
+  --color-primary-500: rgb(212, 136, 14);
+  --color-primary-700: rgb(212, 120, 14);
+  --color-primary-200-contrast: rgb(100, 46, 2);
+  --color-primary-500-contrast: white;
+
+  --color-error-100: rgb(255, 192, 180);
+  --color-error-500: rgb(199, 51, 15);
+
+  --color-primary-500-bg: rgb(63, 60, 58);
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+
+  --border-radius-small: 4px;
+  --border-radius-medium: 6px;
+
+  --shadow-medium: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+body {
+  background-color: var(--color-gray-500); /* 사용자 지정 css코드를 사용하기 위하여 var()를 사용한다. */
+  color: var(--color-gray-100);
+  margin: 0; /* 많은 브라우저가 body에 마진이 적용되어 주변에 빈 간격이 설정되기때문에 0으로 없애준다. */
+}
+
+main {
+  width: 90%;
+  max-width: 50rem;
+  margin: 0 auto; /* 통상적으로 margin: 0 0 0 0  4개의 숫자가 들어가며 각각 위, 오, 아래, 왼 이고 2개만 입력시 상하 좌우 이다 */
+}
+
+ul,
+ol {
+  list-style: none; /* 글머리 기호등을 없앰. */
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;  /* 기본적으로 링크에 적용되어있는 밑줄을 제거하기 위함. */
+  color: var(--color-primary-400);
+}
+
+.btn {
+  cursor: pointer;
+  font:  inherit; /* 상위(html)에 지정된 폰트가 상속된다. */
+  padding: var(--space-2) var(--space-6);
+  background-color: var(--color-primary-500);
+  color: var(--color-primary-500-contrast);
+  border: 1px solid var(--color-primary-500);
+  border-radius: var(--border-radius-small);
+}
+
+.btn:hover,
+.btn:active {
+  background-color: var(--color-primary-700);
+  border-color: var(--color-primary-700);
+}
