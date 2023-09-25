@@ -1,0 +1,139 @@
+/* 모바일에서의 화면을 기준으로 @media이후 데스크탑의 화면을 설정하고 있다/ */
+
+main {
+    margin-top: 6rem;   /* 헤더를 따로 위에 고정했기 때문에 헤더의 heigh 5rem보다 1rem만큼의 마진을 더 주면서 메인의 내용이 헤더에 깔리지 않도록 함 */
+}
+
+#main-header {  /* fixed를 활용하여 모바일에서 스크롤을 내려도 따라오도록 */
+    position: fixed;    /* 헤더를 다른 내용들과는 관계없이 좌상단에 고정 (헤더를 잘라서 화면위에 붙였다고 보면됨. - 다른화면이 헤더밑에 깔림) */
+    top: 0;
+    left: 0;
+    width: 100%;
+    max-width: 60rem;
+    height: 5rem;
+    margin: 0 auto;
+    padding: 0 var(--space-6);
+    display: flex; /* 항목, 로고, nav바, 햄버거버튼 위치 배치를 위해 사용 */
+    justify-content: space-between; /* 가운데 여백을 두고 내부 요소들을 좌우로 밀어냄 */
+    align-items: center;
+    border-bottom: 1px solid var(--color-primary-500);
+    background-color: var(--color-gray-500);
+}
+
+#logo a {
+    font-weight: bold;
+    font-size: 2rem;
+}
+
+#main-header nav {  /* 모바일 화면에서 햄버거버튼 제외 보이지않게 */
+    display: none;
+}
+
+.nav-items {
+    height: 100%;
+    display: flex;  /* ul안의 li들을 수평으로 배치하기위해서 flex사용 (기존에는 리스트이기 때문에 위에서 아래로 나열되어 있다) */
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+
+}
+
+.nav-items li { /* li항목간 간격늘리기 */
+    margin: 0 var(--space-2);
+}
+
+.nav-items button {
+    font: inherit;
+    cursor: pointer;
+    border: 1px solid var(--color-primary-500);
+    border-radius: var(--border-radius-small);
+    background-color: transparent;
+    padding: var(--space-2) var(--space-4);
+}
+
+#mobile-menu-btn {  /* 햄버거 버튼 위치잡기 */
+    display: flex;
+    flex-direction: column; /* 햄버거 모양을 위해 flex로 정렬한 span을 위에서 아래로 재정렬 하기 위함 */
+    justify-content: space-around; /* 바(스팬) 주변에 고르게 분포된 공간이 있도록 */
+    border: none;
+    cursor: pointer;
+    height: 2.25rem;
+    width: 2.25rem;
+    background-color: transparent;  /* 배경색 투명하게해서 햄버거버튼만 보이게 */
+    padding: 0;
+}
+
+#mobile-menu-btn span { /* 햄버거 버튼 모양 생성 */
+    width: 2.25rem;
+    height: 0.2rem;
+    background-color: var(--color-gray-100);
+}
+
+#mobile-menu {  /* 모바일에서 햄버거버튼 눌렀을때의 aside의 설정중 */
+    position: fixed;
+    top: 5rem;  /* 모바일에서 항상 헤더를 보기위해 5rem으로 설정 */
+    left: 0;
+    height: calc(100vh - 5rem);    /* 화면의 총 사용가능한 높이에서 헤더의 5rem값을 뺀 뷰포트 높이를 나타내는 특수단위 */
+    width: 100%;
+    background-color: var(--color-gray-700);
+    display: none;
+    flex-direction: column;
+    align-items: center;
+}
+
+#mobile-menu.open {
+    display: flex;
+}
+
+#mobile-menu nav {
+    height: 20rem;
+    width: 90%;
+    margin: var(--space-4) auto;
+}
+
+#mobile-menu .nav-items a,
+#mobile-menu .nav-items button {
+    font-size: 1.75rem;
+    color: var(--color-primary-100);
+}
+
+@media (min-width: 48rem) { /* 좌우크기가 최소 48rem이상일 때에는 데스크탑 화면 */
+    main {
+        margin-top: 0;  /* 데스크탑에서는 헤더의 위치를 고정하지 않기때문에 0으로 설정 */
+    }
+
+    #main-header {
+        position: static;   /* 데스크탑에서는 헤더의 위치를 고정하지 않음 */
+    }
+
+    #main-header nav {
+        display: block; /* 데스크탑 화면에서는 보이게 */
+    }
+
+    .nav-items button {
+        color: var(--color-primary-500);
+        border-color: var(--color-primary-500);
+    }
+
+    #mobile-menu-btn {
+        display: none;
+    }
+
+    #mobile-menu {
+        display: none;
+    }
+
+    .nav-items {
+        flex-direction: row;    /* 데스크탑 화면에서 nav아이템의 수평정렬 */
+    }
+
+    .nav-items a {
+        padding: var(--space-2) var(--space-4);
+        border-radius: var(--border-radius-small);
+    }
+
+    .nav-items a:hover,
+    .nav-items a:active {
+        background-color: var(--color-primary-500-bg);
+    }
+}

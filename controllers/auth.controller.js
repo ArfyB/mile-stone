@@ -1,12 +1,39 @@
 const User = require("../models/user.model");
 const authUtil = require("../util/authentication");
 const validation = require("../util/validation");
+const sessionFlash = require("../util/session-flash");
 
 function getSignup(req, res, next) {
-  res.render("customer/auth/signup");
+  let sessionData = sessionFlash.getSessionData(req); // sessionData = 로그인, 가입실패시 입력한 데이터 보존을 위한 변수
+
+  if (!sessionData) {
+    sessionData={       
+      errorMessage: '',
+      email: '',
+      confirmEmail: '',
+      password: '',
+      fullname: '',
+      street: '',
+      postal: '',
+      city: ''
+    }
+
+  }
+  res.render("customer/auth/signup", { inputData: sessionData });
 }
 
 async function signup(req, res, next) {
+
+  const enteredData = {
+    email: req.body.email,
+    confirmEmail: req.body['confirm-email'],
+    password: req.body.password,
+    fullname: req.body.fullname,
+    street: req.body.street,
+    postal: req.body.postal,
+    city: req.body.city,
+  };
+
   if (
     !validation.userDetailsAreValid(
       req.body.email,
@@ -18,7 +45,16 @@ async function signup(req, res, next) {
     ) ||
     !validation.emailIsConfirmed(req.body.email, req.body["confirm-email"]) // -가 .표기법으로는 허용되지않기 때문에 대괄호를 이용한다.
   ) {
-    res.redirect("/signup");
+    sessionFlash.flashDataToSession(
+      req,
+      {
+        errorMessage: "Please check your input",
+        ...enteredData, // ...은 객체확산의 효과. {}로 묶여있는 데이터를 각각 하나씩으로 나눠줌
+      },
+      function () {
+        res.redirect("/signup");
+      }
+    );
     return;
   }
 
@@ -35,10 +71,19 @@ async function signup(req, res, next) {
     const existsAlready = await user.existsAlready();
 
     if (existsAlready) {
-      res.redirect("/signup");
+      sessionFlash.flashDataToSession(
+        req,
+        {
+          errorMessage: "User exists already.",
+          ...enteredData,
+        },
+        function () {
+          res.redirect("/signup");
+        }
+      );
       return;
     }
-    
+
     await user.signup();
   } catch (error) {
     next(error); //기본오류 미들웨어가 실행되도록 함.
@@ -49,7 +94,17 @@ async function signup(req, res, next) {
 }
 
 function getLogin(req, res, next) {
-  res.render("customer/auth/login");
+  let sessionData = sessionFlash.getSessionData(req);
+  
+  if (!sessionData) {
+    sessionData = {
+      errorMessage: '',
+      email: '',
+      password: ''
+    }
+  }
+  
+  res.render("customer/auth/login", { inputData: sessionData });
 }
 
 async function login(req, res, next) {
@@ -63,8 +118,16 @@ async function login(req, res, next) {
     return;
   }
 
+  const sessionErrorData = {
+    errorMessage: "check email, password",
+    email: user.email,
+    password: user.password,
+  };
+
   if (!existingUser) {
-    res.redirect("/login");
+    sessionFlash.flashDataToSession(req, sessionErrorData, function () {
+      res.redirect("/login");
+    });
     return;
   }
 
@@ -73,7 +136,9 @@ async function login(req, res, next) {
   ); // user.model.js  - 기존 데이터베이스에서 같은 이메일을 가진 유저의 저장된 해싱된 비밀번호 전달
 
   if (!passwordIsCorrect) {
-    res.redirect("/login");
+    sessionFlash.flashDataToSession(req, sessionErrorData, function () {
+      res.redirect("/login");
+    });
     return;
   }
 
